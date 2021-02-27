@@ -4,11 +4,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Post
+from .forms import PostCreateForm
 
 
 def index(request):
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", {'create_form': PostCreateForm()})
 
 
 def login_view(request):
@@ -61,3 +62,19 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def create_post(request):
+    if request.method == 'POST':
+        form = PostCreateForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+            Post.objects.create(content=content, owner=request.user)
+
+            return render(request, 'network/index.html', {'create_form': PostCreateForm()})
+        else:
+            return render(request, 'network/index.html', {'create_form': PostCreateForm(request.POST)})
+
+    return render(request, 'network/index.html', {'create_form': PostCreateForm()})
+
+

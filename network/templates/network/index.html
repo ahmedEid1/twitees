@@ -2,8 +2,13 @@
 
 {% block body %}
     <div class="new_post">
-        <form>
-            <textarea></textarea>
+        <form action="{% url 'create_post' %}" method="post">
+            <div class="fieldWrapper">
+                {{ create_form.content.errors }}
+                {{ create_form.content.label_tag }}
+                {{ create_form.content }}
+            </div>
+            {% csrf_token %}
             <input type="submit">
         </form>
     </div>
