@@ -1,4 +1,5 @@
 {% extends 'network/layout.html' %}
+{% load static %}
 
 {% block body %}
     <div class="profile">
@@ -7,10 +8,10 @@
         <div class="alert alert-success">{{ profile_owner.username }} follows {{ profile_owner.following.count }}</div>
 
         {% if user.is_authenticated and user.id != profile_owner.id %}
-            {% if user in profile_owner.followers %}
-                <button id="unfollow" class="btn btn-danger">UnFollow</button>
+            {% if user in profile_owner.followers.all %}
+                <button id="unfollow" class="btn btn-danger"><a href="{% url 'unfollow' user.id profile_owner.id %}">Unfollow</a></button>
             {% else %}
-                <button id="follow" class="btn btn-success">Follow</button>
+                <button id="follow"  class="btn btn-success"><a href="{% url 'follow' user.id profile_owner.id %}">Follow</a></button>
             {% endif %}
         {% endif %}
 

@@ -9,7 +9,8 @@ from .forms import PostCreateForm
 
 
 def index(request):
-    return render(request, "network/index.html", {'create_form': PostCreateForm()})
+    posts = Post.objects.all()
+    return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': posts})
 
 
 def login_view(request):
@@ -74,18 +75,50 @@ def create_post(request):
             content = form.cleaned_data['content']
             Post.objects.create(content=content, owner=request.user)
 
-            return render(request, 'network/index.html', {'create_form': PostCreateForm()})
+            posts = Post.objects.all()
+            return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': posts})
         else:
-            return render(request, 'network/index.html', {'create_form': PostCreateForm(request.POST)})
+            posts = Post.objects.all()
+            return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': posts})
 
-    return render(request, 'network/index.html', {'create_form': PostCreateForm()})
+    posts = Post.objects.all()
+    return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': posts})
 
 
 def all_posts(request):
     posts = Post.objects.all()
-    return render(request, 'network/posts/post_list.html', {'posts': posts})
+    return render(request, 'network/posts/post_list.html', {'title': 'All', 'posts': posts})
 
 
 def user_profile(request, pk):
     profile_owner = User.objects.get(pk=pk)
     return render(request, 'network/profile.html', {'profile_owner': profile_owner})
+
+
+def follow(request, user, user_to_follow):
+    person = User.objects.get(pk=user)
+    personToFollow = User.objects.get(pk=user_to_follow)
+
+    person.following.add(personToFollow)
+
+    return render(request, 'network/profile.html', {'profile_owner': personToFollow})
+
+
+def unfollow(request, user, user_to_follow):
+    person = User.objects.get(pk=user)
+    personToFollow = User.objects.get(pk=user_to_follow)
+
+    person.following.remove(personToFollow)
+
+    return render(request, 'network/profile.html', {'profile_owner': personToFollow})
+
+
+def following_posts(request):
+    if not request.user.is_authenticated:
+        return render(request, 'network/login.html')
+
+    user = User.objects.get(pk=request.user.id)
+    followed_users = user.following
+    posts = Post.objects.filter(owner__in=followed_users.all())
+
+    return render(request, 'network/posts/post_list.html', {'title': 'Following', 'posts': posts})

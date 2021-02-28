@@ -1,6 +1,7 @@
 {% extends 'network/layout.html' %}
 
 {% block body %}
+    <h3 class="display-4 btn-primary">{{ title }}</h3>
     {% for post in posts %}
        <div class="card-body d-flex flex-column align-items-start">
               <strong class="d-inline-block mb-2 text-primary"><a href="{% url 'user_profile' post.owner.id %}">{{ post.owner.username }}</a></strong>

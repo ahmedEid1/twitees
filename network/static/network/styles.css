@@ -22,3 +22,13 @@
     text-align: center;
     border: 1px solid black;
 }
+
+button a {
+    text-decoration: inherit;
+    color: inherit;
+}
+button a:hover {
+    text-decoration: inherit;
+    color: inherit;
+
+}

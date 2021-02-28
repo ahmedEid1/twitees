@@ -16,3 +16,9 @@ Profile Page:
     - For any other user who is signed in, 
         - this page should also display a “Follow” or “Unfollow” button that will let the current user toggle whether or not they are following this user’s posts. 
           - Note that this only applies to any “other” user: a user should not be able to follow themselves.
+---
+
+Following: 
+    - The “Following” link in the navigation bar should take the user to a page where they see all posts made by users that the current user follows.
+        - This page should behave just as the “All Posts” page does, just with a more limited set of posts.
+        - This page should only be available to users who are signed in.
