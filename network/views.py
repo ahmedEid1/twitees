@@ -79,3 +79,13 @@ def create_post(request):
             return render(request, 'network/index.html', {'create_form': PostCreateForm(request.POST)})
 
     return render(request, 'network/index.html', {'create_form': PostCreateForm()})
+
+
+def all_posts(request):
+    posts = Post.objects.all()
+    return render(request, 'network/posts/post_list.html', {'posts': posts})
+
+
+def user_profile(request, pk):
+    profile_owner = User.objects.get(pk=pk)
+    return render(request, 'network/profile.html', {'profile_owner': profile_owner})

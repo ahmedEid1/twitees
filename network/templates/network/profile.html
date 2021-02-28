@@ -1,0 +1,32 @@
+{% extends 'network/layout.html' %}
+
+{% block body %}
+    <div class="profile">
+        <h3 class="display-3" >{{ profile_owner.username }}</h3>
+        <div class="alert alert-success">{{ profile_owner.followers.count }} people follow {{ profile_owner.username }}</div>
+        <div class="alert alert-success">{{ profile_owner.username }} follows {{ profile_owner.following.count }}</div>
+
+        {% if user.is_authenticated and user.id != profile_owner.id %}
+            {% if user in profile_owner.followers %}
+                <button id="unfollow" class="btn btn-danger">UnFollow</button>
+            {% else %}
+                <button id="follow" class="btn btn-success">Follow</button>
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    <h3 class="display-3">{{ profile_owner.username }} Posts</h3>
+    {% for post in profile_owner.posts.all %}
+       <div class="card-body d-flex flex-column align-items-start">
+              <strong class="d-inline-block mb-2 text-primary"><a href="{% url 'user_profile' post.owner.id %}">{{ post.owner.username }}</a></strong>
+
+              <div class="mb-1 text-muted">{{ post.time_created }}</div>
+              <p class="card-text mb-auto">{{ post.content }}</p>
+              <button class="btn btn-primary">{{ post.user_likes.count }}</button>
+            </div>
+    {% empty %}
+        {{ user.username }} has not posted anything yet.
+    {% endfor %}
+
+{% endblock %}

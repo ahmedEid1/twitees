@@ -15,3 +15,10 @@
 #create_post form textarea {
     height: 150px;
 }
+
+.profile {
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid black;
+}
