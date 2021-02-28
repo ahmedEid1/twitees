@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -10,7 +11,11 @@ from .forms import PostCreateForm
 
 def index(request):
     posts = Post.objects.all()
-    return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': posts})
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': page_obj,
+                                                  'page_num_range': range(page_obj.paginator.num_pages)})
 
 
 def login_view(request):
@@ -76,18 +81,37 @@ def create_post(request):
             Post.objects.create(content=content, owner=request.user)
 
             posts = Post.objects.all()
-            return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': posts})
+            paginator = Paginator(posts, 10)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+
+            return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': page_obj,
+                                                          'page_num_range': range(page_obj.paginator.num_pages)})
         else:
             posts = Post.objects.all()
-            return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': posts})
+            paginator = Paginator(posts, 10)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
 
+            return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': page_obj,
+                                                          'page_num_range': range(page_obj.paginator.num_pages)})
     posts = Post.objects.all()
-    return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': posts})
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "network/index.html", {'create_form': PostCreateForm(), 'posts': page_obj,
+                                                  'page_num_range': range(page_obj.paginator.num_pages)})
 
 
 def all_posts(request):
     posts = Post.objects.all()
-    return render(request, 'network/posts/post_list.html', {'title': 'All', 'posts': posts})
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'network/posts/post_list.html', {'title': 'All', 'posts': page_obj,
+                                                            'page_num_range': range(page_obj.paginator.num_pages)})
 
 
 def user_profile(request, pk):
@@ -120,5 +144,9 @@ def following_posts(request):
     user = User.objects.get(pk=request.user.id)
     followed_users = user.following
     posts = Post.objects.filter(owner__in=followed_users.all())
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-    return render(request, 'network/posts/post_list.html', {'title': 'Following', 'posts': posts})
+    return render(request, 'network/posts/post_list.html', {'title': 'Following', 'posts': page_obj,
+                                                            'page_num_range': range(page_obj.paginator.num_pages)})

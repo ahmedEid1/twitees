@@ -22,3 +22,10 @@ Following:
     - The “Following” link in the navigation bar should take the user to a page where they see all posts made by users that the current user follows.
         - This page should behave just as the “All Posts” page does, just with a more limited set of posts.
         - This page should only be available to users who are signed in.
+---
+Pagination:
+    - On any page that displays posts, posts should only be displayed 10 on a page. 
+    - If there are more than ten posts, a “Next” button should appear to take the user to the next page of posts (which should be older than the current page of posts). 
+    - If not on the first page, a “Previous” button should appear to take the user to the previous page of posts as well.
+---
+
