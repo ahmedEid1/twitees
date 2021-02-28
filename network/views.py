@@ -65,6 +65,9 @@ def register(request):
 
 
 def create_post(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/index.html", {'create_form': PostCreateForm()})
+
     if request.method == 'POST':
         form = PostCreateForm(request.POST)
         if form.is_valid():
@@ -76,5 +79,3 @@ def create_post(request):
             return render(request, 'network/index.html', {'create_form': PostCreateForm(request.POST)})
 
     return render(request, 'network/index.html', {'create_form': PostCreateForm()})
-
-

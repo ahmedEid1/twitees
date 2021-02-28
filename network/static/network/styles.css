@@ -1,0 +1,17 @@
+#create_post {
+    border: 1px solid black;
+}
+
+#create_post h3 {
+    margin: 10px 0 10px 10px;
+}
+
+#create_post form {
+    width: 90%;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+#create_post form textarea {
+    height: 150px;
+}

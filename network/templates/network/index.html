@@ -1,15 +1,16 @@
 {% extends "network/layout.html" %}
+{% load bootstrap_tags %}
 
 {% block body %}
-    <div class="new_post">
-        <form action="{% url 'create_post' %}" method="post">
-            <div class="fieldWrapper">
-                {{ create_form.content.errors }}
-                {{ create_form.content.label_tag }}
-                {{ create_form.content }}
-            </div>
-            {% csrf_token %}
-            <input type="submit">
-        </form>
-    </div>
+    {% if user.is_authenticated %}
+        <div id="create_post">
+            <h3>New Post</h3>
+            <form action="{% url 'create_post' %}" method="post">
+                {{ create_form|as_bootstrap_inline   }}
+                {% csrf_token %}
+                <input type="submit" class="btn btn-success" value="Create Post">
+            </form>
+        </div>
+
+    {% endif %}
 {% endblock %}
