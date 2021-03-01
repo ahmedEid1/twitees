@@ -1,0 +1,34 @@
+{% extends "network/layout.html" %}
+{% load bootstrap_tags %}
+
+{% block body %}
+
+        <div class="alert alert-success" style="display: none">Post Has been edited successfully </div>
+
+    <div id="create_post">
+        <h3>Edit Post</h3>
+            {{ edit_form|as_bootstrap_inline   }}
+            {% csrf_token %}
+            <input id="edit" data-id="{{ post_id }}" type="submit" class="btn btn-success" value="Edit Post">
+    </div>
+
+    <script>
+        document.querySelector('#edit').onclick = () => edit_post();
+
+        const edit_post = () => {
+            fetch('{{ post_id }}', {
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                        'content': document.querySelector('textarea').value
+                }),
+                headers: {
+                    "X-CSRFToken": document.querySelector('input[type="hidden"]').value,
+                'Content-Type': 'application/json'
+                },
+            }).then(
+                () => document.querySelector('.alert').style.display = 'block'
+            )
+        }
+    </script>
+{% endblock %}

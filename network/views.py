@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
 from django.db import IntegrityError
@@ -150,3 +152,23 @@ def following_posts(request):
 
     return render(request, 'network/posts/post_list.html', {'title': 'Following', 'posts': page_obj,
                                                             'page_num_range': range(page_obj.paginator.num_pages)})
+
+
+def edit_post(request, post_id):
+    if Post.objects.filter(pk=post_id).exists():
+        post = Post.objects.get(pk=post_id)
+    else:
+        return HttpResponseRedirect(reverse('index'))
+
+    if post.owner.id != request.user.id:
+        return HttpResponseRedirect(reverse('index'))
+    if not request.user.is_authenticated:
+        return render(request, 'network/login.html')
+
+    if request.method == 'POST':
+        data = json.loads(request.body.decode("utf-8"))
+        post.content = data['content']
+        post.save()
+        return HttpResponse("Success")
+    else:
+        return render(request, 'network/edit.html', {'edit_form': PostCreateForm(instance=post), 'post_id': post_id})
