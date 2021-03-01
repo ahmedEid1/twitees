@@ -172,3 +172,18 @@ def edit_post(request, post_id):
         return HttpResponse("Success")
     else:
         return render(request, 'network/edit.html', {'edit_form': PostCreateForm(instance=post), 'post_id': post_id})
+
+
+def like(request, user_id, post_id):
+    if not request.user.is_authenticated:
+        return render(request, 'network/login.html')
+
+    user = User.objects.get(pk=user_id)
+    post = Post.objects.get(pk=post_id)
+
+    if user in post.user_likes.all():
+        post.user_likes.remove(user)
+    else:
+        post.user_likes.add(user)
+
+    return HttpResponse("Likes updates")

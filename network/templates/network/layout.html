@@ -45,5 +45,36 @@
             {% block body %}
             {% endblock %}
         </div>
+
+
+        <script>
+        const like_buttons = document.querySelectorAll('.like');
+
+    like_buttons.forEach((like_button) => like_button.onclick = (e) => toggle_like(e))
+
+        function toggle_like(e) {
+            fetch(`like/{{ user.id }}/${e.target.id}`)
+            .then(
+                () => {
+                    console.log("toggle like")
+                }
+            )
+
+
+            if (e.target.classList.contains('btn-success')) {
+                e.target.classList.remove('btn-success');
+                e.target.classList.add('btn-primary');
+                e.target.innerHTML--;
+
+            }
+            else {
+                e.target.classList.remove('btn-primary');
+                e.target.classList.add('btn-success');
+                e.target.innerHTML++;
+            }
+        }
+
+
+    </script>
     </body>
 </html>

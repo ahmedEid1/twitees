@@ -23,7 +23,11 @@
             {% endif %}
               <div class="mb-1 text-muted">{{ post.time_created }}</div>
               <p class="card-text mb-auto">{{ post.content }}</p>
-              <button class="btn btn-primary">{{ post.user_likes.count }}</button>
+
+            {% if user.is_authenticated %}
+                <button id="{{ post.id }}" class="btn
+                            {% if user in post.user_likes.all %}btn-success{% else %}btn-primary{% endif %}
+                             like">{{ post.user_likes.count }}</button>            {% endif %}
             </div>
     {% empty %}
         There are no posts right now, return later
